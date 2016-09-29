@@ -12,7 +12,7 @@
         <item
             android:id="@+id/nav_dr_clinic"
             android:icon="@drawable/ic_menu_home"
-            android:title="مطب من" />
+            android:title= "پیرایشگاه من"/>
         <item
             android:id="@+id/nav_dr_personalInfo"
             android:icon="@drawable/ic_patentes"
@@ -24,15 +24,15 @@
         <item
             android:id="@+id/nav_dr_patients"
             android:icon="@drawable/ic_patients"
-            android:title="لیست پذیرش" />
+            android:title="لیست مشتری" />
         <item
             android:id="@+id/nav_dr_patientFile"
             android:icon="@drawable/ic_nobat"
-            android:title="پرونده بیمار" />
+            android:title= "سابقه مشتری"/>
         <item
             android:id="@+id/nav_dr_map"
             android:icon="@drawable/ic_location"
-            android:title="نقشه مطب من" />
+            android:title= "نقشه پیرایشگاه من"/>
         <item
             android:id="@+id/nav_dr_notification"
             android:icon="@drawable/ic_notifications"
@@ -99,7 +99,7 @@
         <item
             android:id="@+id/nav_user_inbox"
             android:icon="@drawable/ic_menu_inbox"
-            android:title="پیام های پزشک" />
+            android:title= "پیام های پیرایشگر"/>
 
         <item
             android:id="@+id/nav_user_gallery"
