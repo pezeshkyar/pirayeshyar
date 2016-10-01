@@ -59,7 +59,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/dialog_newPatient_mobile"
         android:layout_marginTop="20dp"
-        android:text="مایل به ثبت نام بیمار در سامانه می باشم " />
+        android:text="مایل به ثبت نام مشتری در سامانه می باشم " />
 
     <CheckBox
         android:id="@+id/dialog_newPatient_chbox"
