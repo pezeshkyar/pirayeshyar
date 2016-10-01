@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">myapp</string>
     <string name="dr_profile_title">درباره شما ...</string>
-    <string name="dr_clininc_title">درباره مطب ...</string>
+    <string name="dr_clininc_title">درباره پیرایشگاه...</string>
     <string name="dr_nobat_title">مدیریت نوبت</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

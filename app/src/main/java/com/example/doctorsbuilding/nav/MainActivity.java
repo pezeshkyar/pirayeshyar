@@ -406,7 +406,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().setGroupVisible(R.id.navigation_view_signUp, false);
                 navigationView.getMenu().setGroupVisible(R.id.navigation_view_dr, true);
                 username.setText(G.UserInfo.getFirstName().concat(" " + G.UserInfo.getLastName()));
-                version.setText("نسخه پزشک");
+                version.setText("نسخه پیرایشگاه");
                 Bitmap drPic = RoundedImageView.getCroppedBitmap(G.doctorImageProfile, 160);
                 imgProfile.setImageBitmap(drPic);
                 break;
@@ -424,7 +424,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().setGroupVisible(R.id.navigation_view_signUp, false);
                 navigationView.getMenu().setGroupVisible(R.id.navigation_view_user, true);
                 username.setText(G.UserInfo.getFirstName().concat(" " + G.UserInfo.getLastName()));
-                version.setText("نسخه بیمار");
+                version.setText("نسخه مشتری");
                 Bitmap userPic = RoundedImageView.getCroppedBitmap(G.doctorImageProfile, 160);
                 imgProfile.setImageBitmap(userPic);
                 break;

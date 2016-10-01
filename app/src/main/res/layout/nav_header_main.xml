@@ -4,7 +4,7 @@
     android:id="@+id/view_container"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:background="#0088cc"
+    android:background="@color/colorAccent"
     android:gravity="bottom"
     android:orientation="vertical">
 
@@ -41,7 +41,7 @@
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/img_profile33"
             android:layout_alignBaseline="@+id/img_profile33"
-            android:text="نسخه پزشک"
+            android:text="نسخه پیرایشگاه"
             android:textColor="#E3F2FD" />
 
 
