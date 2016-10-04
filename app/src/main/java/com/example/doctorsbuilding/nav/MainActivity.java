@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        settings = getSharedPreferences("doctorBuilding", 0);
+        settings = G.getSharedPreferences();
         loadUser();
         initViews();
 
@@ -425,8 +425,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().setGroupVisible(R.id.navigation_view_user, true);
                 username.setText(G.UserInfo.getFirstName().concat(" " + G.UserInfo.getLastName()));
                 version.setText("نسخه مشتری");
-                Bitmap userPic = RoundedImageView.getCroppedBitmap(G.doctorImageProfile, 160);
-                imgProfile.setImageBitmap(userPic);
+                if (G.UserInfo.getImgProfile() != null) {
+                    Bitmap imgRound = RoundedImageView.getCroppedBitmap(G.UserInfo.getImgProfile(), 160);
+                    imgProfile.setImageBitmap(imgRound);
+                } else {
+                    Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+                    imgProfile.setImageBitmap(bmpImg);        }
                 break;
         }
 

@@ -128,16 +128,12 @@ public class PersonalInfoActivity extends AppCompatActivity {
         txtMobile.setText(G.UserInfo.getPhone());
         txtEmail.setText(G.UserInfo.getEmail());
 
-
         if (G.UserInfo.getImgProfile() != null) {
-            if (role == UserType.Dr.ordinal()) {
                 Bitmap imgRound = RoundedImageView.getCroppedBitmap(G.UserInfo.getImgProfile(), 160);
                 profileImage.setImageBitmap(imgRound);
-            } else {
-                Bitmap imgRound = RoundedImageView.getCroppedBitmap(G.UserInfo.getImgProfile(), 160);
-                profileImage.setImageBitmap(imgRound);
-            }
-        }
+        } else {
+            Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+            profileImage.setImageBitmap(bmpImg);        }
     }
 
     private void initViews() {
@@ -157,10 +153,11 @@ public class PersonalInfoActivity extends AppCompatActivity {
         btnImgSelect = (Button) findViewById(R.id.dr_btnImgProfile);
         database = new DatabaseAdapter(PersonalInfoActivity.this);
         if (role == UserType.Dr.ordinal()) {
-            //Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+            Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+            profileImage.setImageBitmap(bmpImg);
         } else {
-            //Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_user_profile);
-            //profileImage.setImageBitmap(bmpImg);
+            Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+            profileImage.setImageBitmap(bmpImg);
 //            profileImage.setVisibility(View.GONE);
 //            btnImgSelect.setVisibility(View.GONE);
         }
