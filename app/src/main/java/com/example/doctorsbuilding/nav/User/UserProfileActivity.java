@@ -56,6 +56,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private Button btnImgSelect;
     private Bitmap drPic;
     private Bitmap roundedDrPic;
+    private EditText txtEmail;
     private ArrayAdapter<String> stateAdapter;
     private ArrayAdapter<String> cityAdapter;
     private ArrayList<State> stateList;
@@ -98,6 +99,7 @@ public class UserProfileActivity extends AppCompatActivity {
         btnInsert = (Button) findViewById(R.id.dr_btnPersonalInfoInsert);
         profileImage = (ImageView) findViewById(R.id.dr_imgProfile);
         btnImgSelect=(Button) findViewById(R.id.dr_btnImgProfile);
+        txtEmail = (EditText)findViewById(R.id.dr_email);
         btnImgSelect.setText("انتخاب عکس");
        // progressBar = (ProgressBar) findViewById(R.id.user_profile_progressBar);
     }
@@ -392,6 +394,7 @@ public class UserProfileActivity extends AppCompatActivity {
             user.setUserName(txtUserName.getText().toString().trim());
             user.setPassword(txtPassword.getText().toString().trim());
             user.setPhone(txtMobile.getText().toString().trim());
+            user.setEmail(txtEmail.getText().toString().trim());
             user.setRole(UserType.User.getUsertype());
             user.setCityID((cityList.get(spinnerCity.getSelectedItemPosition()).GetCityID()));
 
