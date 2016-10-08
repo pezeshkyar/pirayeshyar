@@ -138,8 +138,16 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... strings) {
             try {
-                if (menu != UserType.Guest) {
-                    G.UserInfo = WebService.invokeGetUserInfoWS(G.UserInfo.getUserName(), G.UserInfo.getPassword(), G.officeId);
+                User u = new User();
+                u.setUserName(G.UserInfo.getUserName());
+                u.setPassword(G.UserInfo.getPassword());
+                int role = WebService.invokeLoginWS(G.officeId, u);
+                if(role > 0) {
+                    if (menu != UserType.Guest) {
+                        G.UserInfo = WebService.invokeGetUserInfoWS(G.UserInfo.getUserName(), G.UserInfo.getPassword(), G.officeId);
+                    }
+                } else {
+                    G.UserInfo.setRole(UserType.Guest.ordinal());
                 }
                 if (G.UserInfo != null) {
                     G.officeInfo = WebService.invokeGetOfficeInfoWS(G.UserInfo.getUserName(), G.UserInfo.getPassword(), G.officeId);

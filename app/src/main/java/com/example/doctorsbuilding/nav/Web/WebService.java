@@ -43,6 +43,9 @@ public class WebService {
     private static String NAMESPACE = "http://docTurn/";
     //Webservice URL - WSDL File location
     private static String URL = "http://79.175.163.179:8080/pirayeshyar/services/Webservices?wsdl";
+    //private static String URL = "http://192.168.1.123:8080/pirayeshyar/services/Webservices?wsdl";
+    // private static String URL = "http://192.168.1.123:8181/pirayeshyar/services/Webservices?wsdl";
+
     //SOAP Action URI again Namespace + Web method name
     private static String SOAP_ACTION = "http://docTurn/";
 
@@ -289,11 +292,6 @@ public class WebService {
             user.setFirstName(response.getProperty("name").toString());
             user.setLastName(response.getProperty("lastname").toString());
             user.setPhone(response.getProperty("mobileno").toString());
-            try {
-                user.setEmail(response.getProperty("email").toString());
-            }catch(Exception ex){
-                user.setEmail("");
-            }
             user.setUserName(response.getProperty("username").toString());
             user.setRole(Integer.parseInt(response.getProperty("role").toString()));
             user.setCityID(Integer.parseInt(response.getProperty("cityid").toString()));
@@ -309,6 +307,11 @@ public class WebService {
                 user.setImgProfile(null);
             }
             user.setPassword(password);
+            try {
+                user.setEmail(response.getProperty("email").toString());
+            }catch(Exception ex){
+                user.setEmail("");
+            }
         } catch (ConnectException ex) {
             throw new PException(connectMessage);
         } catch (Exception ex) {
@@ -322,13 +325,13 @@ public class WebService {
         if (!G.isOnline()) {
             throw new PException(isOnlineMessage);
         }
-        String webMethName = "getOfficeInfo";
+        String webMethName = "getOfficeInfo2";
         Office office = null;
         SoapObject request = new SoapObject(NAMESPACE, webMethName);
 
         PropertyInfo property = new PropertyInfo();
-        request.addProperty("username", username);
-        request.addProperty("password", password);
+//        request.addProperty("username", username);
+//        request.addProperty("password", password);
         request.addProperty("officeId", officeId);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
