@@ -8,9 +8,9 @@
             <size android:height="20dp" />
         </shape>
     </item>
-    <item>
+    <item android:state_enabled="false">
         <shape>
-            <gradient android:angle="270" android:endColor="#00a78e" android:startColor="#00a78e" />
+            <solid android:color="#00a78e" />
             <stroke android:width="1dp" android:color="#00a0af" />
             <corners android:radius="2dp" />
             <size android:height="20dp" />

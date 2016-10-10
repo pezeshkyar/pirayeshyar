@@ -16,6 +16,9 @@
     <color name="expGroupTextColorWhenIsExpanded">#fbbc05</color>
     <color name="expGroupTextColorWhenNotExpanded">#000000</color>
     <color name="textColor">#49176d</color>
+    <color name="highlightColor">#90000000</color>
+    <color name="blueColor">#2196F3</color>
+
 
 </resources>
 
