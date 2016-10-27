@@ -131,6 +131,14 @@
             android:name=".ContactUs"
             android:screenOrientation="portrait"
             android:theme="@style/MyTheme"/>
+        <activity
+                    android:name=".ActivityManagementTaskes"
+                    android:screenOrientation="portrait"
+                    android:theme="@style/MyTheme" />
+                <activity
+                    android:name=".ActivityImageShow"
+                    android:screenOrientation="portrait"
+                    android:theme="@style/MyTheme" />
 
     </application>
 

@@ -18,6 +18,7 @@ import com.example.doctorsbuilding.nav.Rturn;
 import com.example.doctorsbuilding.nav.StringArraySerializer;
 import com.example.doctorsbuilding.nav.SubExpert;
 import com.example.doctorsbuilding.nav.Task;
+import com.example.doctorsbuilding.nav.TaskGroup;
 import com.example.doctorsbuilding.nav.Turn;
 import com.example.doctorsbuilding.nav.User.City;
 import com.example.doctorsbuilding.nav.User.State;
@@ -43,6 +44,9 @@ public class WebService {
     private static String NAMESPACE = "http://docTurn/";
     //Webservice URL - WSDL File location
     private static String URL = "http://185.129.168.135:8080/arayeshyar/services/Webservices?wsdl";
+    //private static String URL = "http://192.168.1.123:8080/pirayeshyar/services/Webservices?wsdl";
+    // private static String URL = "http://192.168.1.123:8181/pirayeshyar/services/Webservices?wsdl";
+
     //SOAP Action URI again Namespace + Web method name
     private static String SOAP_ACTION = "http://docTurn/";
 
@@ -129,19 +133,20 @@ public class WebService {
             throw new PException(isOnlineMessage);
         }
 
-        String webMethName = "register";
+        String webMethName = "register2";
         String result = null;
         SoapObject request = new SoapObject(NAMESPACE, webMethName);
 
         request.addProperty("name", user.getFirstName());
         request.addProperty("lastname", user.getLastName());
         request.addProperty("mobileno", user.getPhone());
-        request.addProperty("email", user.getEmail());
         request.addProperty("username", user.getUserName());
         request.addProperty("password", user.getPassword());
         request.addProperty("role", user.getRole());
         request.addProperty("cityid", user.getCityID());
-        request.addProperty("pic", null);
+        byte[] picbytes = getBytes(user.getImgProfile());
+        request.addProperty("pic", Base64.encodeToString(picbytes, Base64.DEFAULT));
+        request.addProperty("email", user.getEmail());
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
@@ -163,7 +168,7 @@ public class WebService {
         if (!G.isOnline()) {
             throw new PException(isOnlineMessage);
         }
-        String webMethName = "updateUserInfo2";
+        String webMethName = "updateUserInfo3";
         String result = null;
         SoapObject request = new SoapObject(NAMESPACE, webMethName);
         request.addProperty("username", username);
@@ -171,9 +176,9 @@ public class WebService {
         request.addProperty("name", user.getFirstName());
         request.addProperty("lastname", user.getLastName());
         request.addProperty("mobileno", user.getPhone());
-        request.addProperty("email", user.getEmail());
         request.addProperty("cityid", user.getCityID());
         request.addProperty("newPassword", user.getPassword());
+        request.addProperty("email", user.getEmail());
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
@@ -289,11 +294,6 @@ public class WebService {
             user.setFirstName(response.getProperty("name").toString());
             user.setLastName(response.getProperty("lastname").toString());
             user.setPhone(response.getProperty("mobileno").toString());
-            try {
-                user.setEmail(response.getProperty("email").toString());
-            }catch(Exception ex){
-                user.setEmail("");
-            }
             user.setUserName(response.getProperty("username").toString());
             user.setRole(Integer.parseInt(response.getProperty("role").toString()));
             user.setCityID(Integer.parseInt(response.getProperty("cityid").toString()));
@@ -309,6 +309,11 @@ public class WebService {
                 user.setImgProfile(null);
             }
             user.setPassword(password);
+            try {
+                user.setEmail(response.getProperty("email").toString());
+            } catch (Exception ex) {
+                user.setEmail("");
+            }
         } catch (ConnectException ex) {
             throw new PException(connectMessage);
         } catch (Exception ex) {
@@ -322,13 +327,13 @@ public class WebService {
         if (!G.isOnline()) {
             throw new PException(isOnlineMessage);
         }
-        String webMethName = "getOfficeInfo";
+        String webMethName = "getOfficeInfo2";
         Office office = null;
         SoapObject request = new SoapObject(NAMESPACE, webMethName);
 
         PropertyInfo property = new PropertyInfo();
-        request.addProperty("username", username);
-        request.addProperty("password", password);
+//        request.addProperty("username", username);
+//        request.addProperty("password", password);
         request.addProperty("officeId", officeId);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -830,18 +835,19 @@ public class WebService {
         return reservations;
     }
 
-    public static ArrayList<Task> invokeGetTaskWS(String username, String password, int officeId) throws PException {
+    public static ArrayList<Task> invokeGetTaskWS(String username, String password, int officeId, int taskGroupId) throws PException {
         if (!G.isOnline()) {
             throw new PException(isOnlineMessage);
         }
         Task task = null;
         ArrayList<Task> taskes = new ArrayList<Task>();
-        String webMethName = "getAllTasks";
+        String webMethName = "getTasks";
         SoapObject request = new SoapObject(NAMESPACE, webMethName);
 
         request.addProperty("username", username);
         request.addProperty("password", password);
         request.addProperty("officeId", officeId);
+        request.addProperty("taskGroupId", taskGroupId);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
@@ -858,6 +864,7 @@ public class WebService {
                 task.setOfficeId(Integer.parseInt(obj.getProperty("officeId").toString()));
                 task.setName(obj.getProperty("name").toString());
                 task.setPrice(Integer.parseInt(obj.getProperty("price").toString()));
+                task.setGroupId(Integer.parseInt(obj.getProperty("taskGroupId").toString()));
                 taskes.add(task);
             }
         } catch (ConnectException ex) {
@@ -866,6 +873,45 @@ public class WebService {
             throw new PException(otherMessage);
         }
         return taskes;
+    }
+
+    public static ArrayList<TaskGroup> invokeGetTaskGroupsWS(String username, String password, int officeId) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        TaskGroup task = null;
+        ArrayList<TaskGroup> taskGroups = new ArrayList<TaskGroup>();
+        String webMethName = "getTaskGroups";
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapObject response = (SoapObject) envelope.bodyIn;
+            for (int i = 0; i < response.getPropertyCount(); i++) {
+
+                SoapObject obj = (SoapObject) response.getProperty(i);
+                if (obj != null) {
+                    task = new TaskGroup();
+                    task.setId(Integer.parseInt(obj.getProperty("id").toString()));
+                    task.setOfficeId(Integer.parseInt(obj.getProperty("officeId").toString()));
+                    task.setName(obj.getProperty("name").toString());
+                    taskGroups.add(task);
+                }
+            }
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return taskGroups;
     }
 
     public static int invokeReserveForGuestWS(String username, String password, Reservation reservation, int cityId) throws PException {
@@ -1530,7 +1576,7 @@ public class WebService {
         if (!G.isOnline()) {
             throw new PException(isOnlineMessage);
         }
-        ArrayList<Integer> imageIds= null;
+        ArrayList<Integer> imageIds = null;
         String webMethName = "getAllGalleyPicId";
         SoapObject request = new SoapObject(NAMESPACE, webMethName);
 
@@ -1545,7 +1591,7 @@ public class WebService {
         try {
             androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
             SoapObject response = (SoapObject) envelope.bodyIn;
-            if(response != null) {
+            if (response != null) {
                 imageIds = new ArrayList<Integer>();
                 for (int i = 0; i < response.getPropertyCount(); i++) {
                     SoapPrimitive obj = (SoapPrimitive) response.getProperty(i);
@@ -1561,6 +1607,7 @@ public class WebService {
 
         return imageIds;
     }
+
     public static PhotoDesc invokeGetGalleryPicWS(String username, String password, int officeId, int picId) throws PException {
         if (!G.isOnline()) {
             throw new PException(isOnlineMessage);
@@ -1630,6 +1677,7 @@ public class WebService {
         }
         return id;
     }
+
     public static void invokeDeleteFromGalleryWS(String username, String password, int officeId, int picId) throws PException {
         if (!G.isOnline()) {
             throw new PException(isOnlineMessage);
@@ -1681,5 +1729,221 @@ public class WebService {
         } catch (Exception ex) {
             throw new PException(otherMessage);
         }
+    }
+
+    public static int invokeAddTaskGroupWS(String username, String password, int officeId, String taskNameGroup) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        String webMethName = "addTaskGroup";
+        int result = 0;
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        PropertyInfo property = new PropertyInfo();
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+        request.addProperty("taskGroupName", taskNameGroup);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            result = Integer.valueOf(response.toString());
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return result;
+    }
+
+    public static String invokeUpdateTaskGroupWS(String username, String password, int officeId, int taskGroupId, String taskNameGroup) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        String webMethName = "updateTaskGroup";
+        String result = "";
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        PropertyInfo property = new PropertyInfo();
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+        request.addProperty("taskGroupId", taskGroupId);
+        request.addProperty("taskGroupName", taskNameGroup);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            result = response.toString();
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return result;
+    }
+
+    public static String invokeDeleteTaskGroupWS(String username, String password, int officeId, int taskGroupId) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        String webMethName = "deleteTaskGroup";
+        String result = "";
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        PropertyInfo property = new PropertyInfo();
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+        request.addProperty("taskGroupId", taskGroupId);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            result = response.toString();
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return result;
+    }
+
+    public static int invokeAddTaskWS(String username, String password, int officeId, String name, int taskGroupId, int price) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        String webMethName = "addTask";
+        int result = 0;
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        PropertyInfo property = new PropertyInfo();
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+        request.addProperty("name", name);
+        request.addProperty("taskGroupId", taskGroupId);
+        request.addProperty("price", price);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            result = Integer.valueOf(response.toString());
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return result;
+    }
+
+    public static String invokeUpdateTaskNameWS(String username, String password, int officeId, int taskId, String taskName) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        String webMethName = "updateTaskName";
+        String result = "";
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        PropertyInfo property = new PropertyInfo();
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+        request.addProperty("taskId", taskId);
+        request.addProperty("taskName", taskName);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            result = response.toString();
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return result;
+    }
+
+    public static String invokeUpdateTaskPriceWS(String username, String password, int officeId, int taskId, int price) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        String webMethName = "updateTaskPrice";
+        String result = "";
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        PropertyInfo property = new PropertyInfo();
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+        request.addProperty("taskId", taskId);
+        request.addProperty("price", price);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            result = response.toString();
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return result;
+    }
+
+
+    public static String invokeDeleteTaskWS(String username, String password, int officeId, int taskId) throws PException {
+        if (!G.isOnline()) {
+            throw new PException(isOnlineMessage);
+        }
+        String webMethName = "deleteTask";
+        String result = "";
+        SoapObject request = new SoapObject(NAMESPACE, webMethName);
+
+        PropertyInfo property = new PropertyInfo();
+        request.addProperty("username", username);
+        request.addProperty("password", password);
+        request.addProperty("officeId", officeId);
+        request.addProperty("taskId", taskId);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransportSE = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransportSE.call(SOAP_ACTION + webMethName, envelope);
+            SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+            result = response.toString();
+        } catch (ConnectException ex) {
+            throw new PException(connectMessage);
+        } catch (Exception ex) {
+            throw new PException(otherMessage);
+        }
+        return result;
     }
 }

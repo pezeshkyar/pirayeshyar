@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 
 import com.example.doctorsbuilding.nav.Dr.Clinic.Office;
 import com.example.doctorsbuilding.nav.User.User;
@@ -43,7 +45,11 @@ public class G extends Application {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public static SharedPreferences getSharedPreferences(){
+    public static SharedPreferences getSharedPreferences() {
         return instance.getSharedPreferences("pirayeshyar", 0);
+    }
+
+    public static Typeface getBoldFont() {
+        return Typeface.createFromAsset(instance.getAssets(), "fonts/IRANSansMobile_Bold.ttf");
     }
 }

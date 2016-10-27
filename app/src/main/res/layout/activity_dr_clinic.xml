@@ -74,7 +74,7 @@
                 android:background="@drawable/my_edit_text"
                 android:hint="@string/drAddress"
                 android:inputType="text|textNoSuggestions"
-                android:maxLength="50"
+                android:maxLength="150"
                 android:maxLines="1"
                 android:padding="8dp" />
 

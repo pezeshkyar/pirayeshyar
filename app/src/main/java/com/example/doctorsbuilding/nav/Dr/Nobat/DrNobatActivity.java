@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import com.example.doctorsbuilding.nav.Util.FormatHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;

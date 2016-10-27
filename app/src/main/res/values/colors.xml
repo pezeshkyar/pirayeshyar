@@ -11,11 +11,14 @@
     <color name="rowItem">#e6e6e6</color>
     <color name="colorStroke">#d0d2d3</color>
     <color name="colorFragment">#e8eded</color>
-    <color name="delete">#CB2027</color>
+    <color name="delete">#d40000</color>
     <color name="drProfileRow">#f4f7f9</color>
     <color name="expGroupTextColorWhenIsExpanded">#fbbc05</color>
     <color name="expGroupTextColorWhenNotExpanded">#000000</color>
-    <color name="textColor">#434343</color>
+    <color name="textColor">#49176d</color>
+    <color name="highlightColor">#90000000</color>
+    <color name="blueColor">#2196F3</color>
+
 
 </resources>
 

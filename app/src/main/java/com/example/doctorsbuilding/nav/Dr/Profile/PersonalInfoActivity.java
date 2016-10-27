@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import com.example.doctorsbuilding.nav.Util.FormatHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -128,15 +129,13 @@ public class PersonalInfoActivity extends AppCompatActivity {
         txtMobile.setText(G.UserInfo.getPhone());
         txtEmail.setText(G.UserInfo.getEmail());
 
-
         if (G.UserInfo.getImgProfile() != null) {
-            if (role == UserType.Dr.ordinal()) {
                 Bitmap imgRound = RoundedImageView.getCroppedBitmap(G.UserInfo.getImgProfile(), 160);
                 profileImage.setImageBitmap(imgRound);
-            } else {
-                Bitmap imgRound = RoundedImageView.getCroppedBitmap(G.UserInfo.getImgProfile(), 160);
-                profileImage.setImageBitmap(imgRound);
-            }
+        } else {
+//            Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+//            profileImage.setImageBitmap(bmpImg);        }
+            profileImage.setImageBitmap(RoundedImageView.getCroppedBitmap(G.doctorImageProfile, 200));
         }
     }
 
@@ -157,10 +156,11 @@ public class PersonalInfoActivity extends AppCompatActivity {
         btnImgSelect = (Button) findViewById(R.id.dr_btnImgProfile);
         database = new DatabaseAdapter(PersonalInfoActivity.this);
         if (role == UserType.Dr.ordinal()) {
-            //Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+            Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+            profileImage.setImageBitmap(bmpImg);
         } else {
-            //Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_user_profile);
-            //profileImage.setImageBitmap(bmpImg);
+            Bitmap bmpImg = BitmapFactory.decodeResource(getResources(), R.mipmap.doctor);
+            profileImage.setImageBitmap(bmpImg);
 //            profileImage.setVisibility(View.GONE);
 //            btnImgSelect.setVisibility(View.GONE);
         }
@@ -534,6 +534,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
                         G.UserInfo.setFirstName(user.getFirstName());
                         G.UserInfo.setLastName(user.getLastName());
                         G.UserInfo.setPassword(user.getPassword());
+                        G.UserInfo.setEmail(user.getEmail());
                         G.UserInfo.setPhone(user.getPhone());
                         G.UserInfo.setStateID(user.getStateID());
                         G.UserInfo.setCityID(user.getCityID());
@@ -541,6 +542,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
                     } else {
                         G.UserInfo.setFirstName(user.getFirstName());
                         G.UserInfo.setLastName(user.getLastName());
+                        G.UserInfo.setEmail(user.getEmail());
                         G.UserInfo.setPassword(user.getPassword());
                         G.UserInfo.setPhone(user.getPhone());
                         G.UserInfo.setStateID(user.getStateID());
